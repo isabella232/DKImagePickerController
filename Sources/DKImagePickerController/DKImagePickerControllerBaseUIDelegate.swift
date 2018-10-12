@@ -9,6 +9,12 @@
 import UIKit
 
 @objc
+public enum DKImagePickerGroupListPresentationStyle: Int {
+    case popover
+    case presented
+}
+
+@objc
 public protocol DKImagePickerControllerUIDelegate {
 
     /**
@@ -67,7 +73,11 @@ public protocol DKImagePickerControllerUIDelegate {
 
     func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type
 
+    func imagePickerControllerGroupCell() -> DKAssetGroupCellType.Type
+
     func imagePickerControllerSelectGroupButton(_ imagePickerController: DKImagePickerController, selectedGroup: DKAssetGroup) -> UIButton
+
+    func imagePickerControllerGroupListPresentationStyle() -> DKImagePickerGroupListPresentationStyle
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +230,10 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         return DKAssetGroupDetailVideoCell.self
     }
 
+    open func imagePickerControllerGroupCell() -> DKAssetGroupCellType.Type {
+        return DKAssetGroupCell.self
+    }
+
     open func imagePickerControllerSelectGroupButton(_ imagePickerController: DKImagePickerController, selectedGroup: DKAssetGroup) -> UIButton {
         let button = self.createSelectGroupButtonIfNeeded()
         let groupsCount = self.imagePickerController.groupDataManager.groupIds?.count ?? 0
@@ -229,6 +243,10 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
 
         self.navigationItem.titleView = self.selectGroupButton
         return button
+    }
+
+    open func imagePickerControllerGroupListPresentationStyle() -> DKImagePickerGroupListPresentationStyle {
+        return .popover
     }
 }
 

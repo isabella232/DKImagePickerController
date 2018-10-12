@@ -155,7 +155,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         func setup() {
             self.resetCachedAssets()
             self.imagePickerController.groupDataManager.add(observer: self)
-            self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
+            self.groupListVC = DKAssetGroupListVC(imagePickerController: self.imagePickerController,
                                                   defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
                                                   selectedGroupDidChangeBlock: { [unowned self] (groupId) in
                                                     self.selectAssetGroup(groupId)
@@ -193,8 +193,15 @@ open class DKAssetGroupDetailVC: UIViewController,
 	}
 
     @objc func showGroupSelector() {
-        if let button = self.selectGroupButton {
-            DKPopoverViewController.popoverViewController(self.groupListVC, fromView: button)
+        switch self.imagePickerController.UIDelegate.imagePickerControllerGroupListPresentationStyle() {
+        case .popover:
+            if let button = self.selectGroupButton {
+                DKPopoverViewController.popoverViewController(self.groupListVC, fromView: button)
+            }
+        case .presented:
+            let navigationController = DKUINavigationController()
+            navigationController.setViewControllers([self.groupListVC], animated: false)
+            self.present(navigationController, animated: true, completion: nil)
         }
     }
 
