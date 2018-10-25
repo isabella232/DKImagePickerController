@@ -119,12 +119,12 @@ class DKAssetGroupCell: UITableViewCell, DKAssetGroupCellType {
         if assetGroup.totalCount == 0 {
             thumbnailImageView.image = DKImagePickerControllerResource.emptyAlbumIcon()
         } else {
-            self.groupDataManager.fetchGroupThumbnail(
+            dataManager.fetchGroupThumbnail(
                 with: assetGroup.groupId,
-                size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
-                options: self.groupThumbnailRequestOptions) { image, info in
-                    if self.tag == tag {
-                        thumbnailImageView.image = image
+                size: CGSize(width: DKAssetGroupCell.preferredHeight, height: DKAssetGroupCell.preferredHeight).toPixel(),
+                options: imageRequestOptions) { [weak self] image, info in
+                    if self?.tag == tag {
+                        self?.thumbnailImageView.image = image
                     }
             }
         }
@@ -199,6 +199,8 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.imagePickerController.UIDelegate.imagePickerControllerPrepareGroupListViewController(self)
 
         let cellType = self.imagePickerController.UIDelegate.imagePickerControllerGroupCell()
         self.tableView.register(cellType, forCellReuseIdentifier: DKImageGroupCellIdentifier)
