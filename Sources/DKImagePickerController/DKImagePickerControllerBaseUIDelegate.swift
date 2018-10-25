@@ -75,10 +75,19 @@ public protocol DKImagePickerControllerUIDelegate {
 
     func imagePickerControllerGroupCell() -> DKAssetGroupCellType.Type
 
+    /**
+      Provide a custom button to be used as the titleView for imagePickerController's navigationItem.
+    */
     func imagePickerControllerSelectGroupButton(_ imagePickerController: DKImagePickerController, selectedGroup: DKAssetGroup) -> UIButton
 
+    /**
+      Specify how asset group list view controller should be presented, default is .popover
+    */
     func imagePickerControllerGroupListPresentationStyle() -> DKImagePickerGroupListPresentationStyle
 
+    /**
+      Use to customize the group list table view controller before presentation.
+    */
     func imagePickerControllerPrepareGroupListViewController(_ listViewController: UITableViewController)
 }
 
